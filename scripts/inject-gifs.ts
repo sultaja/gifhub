@@ -37,7 +37,8 @@ async function run() {
     if (category.name === 'Fintech') searchTerm = 'money reaction'
 
     const query = encodeURIComponent(searchTerm)
-    const url = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${query}&limit=50&rating=g`
+    const offset = Math.floor(Math.random() * 200)
+    const url = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${query}&limit=100&offset=${offset}&rating=g`
 
     try {
       const res = await fetch(url)
@@ -52,9 +53,6 @@ async function run() {
       console.log(`Found ${gifs.length} GIFs from Giphy. Inserting into DB...`)
 
       for (const gif of gifs) {
-        // Direct insert into DB, bypassing AI validation/storage upload to be fast!
-        // Wait, GifHub usually downloads and uploads to Supabase Storage.
-        // For a massive quick load, we can just use the Giphy direct URL!
         const imageUrl = gif.images?.original?.url
         if (!imageUrl) continue
 
@@ -64,7 +62,7 @@ async function run() {
           title: title.substring(0, 100),
           slug: `${category.slug}-reaction-${Math.random().toString(36).substring(2, 9)}`,
           source_url: imageUrl,
-          storage_path: imageUrl, // For direct external URLs, we can put it in storage_path if our UI expects it
+          storage_path: null,
           category_id: category.id,
           subcategory_id: null,
           professionalism_score: Math.floor(Math.random() * 20) + 80,

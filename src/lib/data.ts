@@ -240,19 +240,30 @@ export async function getAllGifSlugs(): Promise<string[]> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
 
-  try {
-    const res = await fetch(`${url}/rest/v1/gifs?select=slug`, {
-      headers: {
-        apikey: key,
-        Authorization: `Bearer ${key}`,
-      },
-    })
-    if (!res.ok) return mockGifs.map((g) => g.slug)
-    const data: Array<{ slug: string }> = await res.json()
-    return data.map((g) => g.slug)
-  } catch {
-    return mockGifs.map((g) => g.slug)
+  let allSlugs: string[] = []
+  let offset = 0
+  const limit = 1000
+  
+  while (true) {
+    try {
+      const res = await fetch(`${url}/rest/v1/gifs?select=slug&limit=${limit}&offset=${offset}`, {
+        headers: {
+          apikey: key,
+          Authorization: `Bearer ${key}`,
+        },
+      })
+      if (!res.ok) break
+      const data: Array<{ slug: string }> = await res.json()
+      if (!data || data.length === 0) break
+      allSlugs.push(...data.map((g) => g.slug))
+      if (data.length < limit) break
+      offset += limit
+    } catch {
+      break
+    }
   }
+
+  return allSlugs.length > 0 ? allSlugs : mockGifs.map((g) => g.slug)
 }
 
 // ─── Tags ────────────────────────────────────────────────────
