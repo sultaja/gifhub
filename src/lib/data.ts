@@ -17,8 +17,9 @@ function isSupabaseConfigured(): boolean {
 }
 
 function resolveGifUrl(gif: DbGif): string {
-  if (gif.storage_path && SUPABASE_URL) {
-    return `${SUPABASE_URL}/storage/v1/object/public/gifs-bucket/${gif.storage_path}`
+  if (gif.storage_path) {
+    if (gif.storage_path.startsWith('http')) return gif.storage_path
+    if (SUPABASE_URL) return `${SUPABASE_URL}/storage/v1/object/public/gifs-bucket/${gif.storage_path}`
   }
   return gif.source_url ?? ''
 }
@@ -34,6 +35,9 @@ function toGifItem(gif: DbGif, tags: DbTag[], catSlug: string, subSlug: string):
     likes: gif.likes,
     categorySlug: catSlug,
     subcategorySlug: subSlug,
+    usageScenario: gif.usage_scenario,
+    professionalismScore: gif.professionalism_score,
+    suggestedCaption: gif.suggested_caption,
     tags: tags.map((t) => t.name),
   }
 }

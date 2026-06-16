@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Copy, Download, Eye, Heart, Check, Share2, Expand } from 'lucide-react'
+import { Copy, Download, Eye, Heart, Check, Share2 } from 'lucide-react'
 import Image from 'next/image'
 import type { GifItem } from '@/lib/types'
 import { Link } from '@/i18n/navigation'
@@ -16,7 +16,7 @@ function formatCount(n: number): string {
   return String(n)
 }
 
-export function GifCard({ gif, index = 0, onQuickView }: { gif: GifItem; index?: number; onQuickView?: (gif: GifItem) => void }) {
+export function GifCard({ gif, index = 0 }: { gif: GifItem; index?: number }) {
   const [isHovered, setIsHovered] = useState(false)
   const [copied, setCopied] = useState(false)
   const { toast } = useToast()
@@ -65,12 +65,6 @@ export function GifCard({ gif, index = 0, onQuickView }: { gif: GifItem; index?:
     }
   }, [gif.slug, gif.title, toast])
 
-  const handleQuickView = useCallback((e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    onQuickView?.(gif)
-  }, [gif, onQuickView])
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
@@ -99,15 +93,6 @@ export function GifCard({ gif, index = 0, onQuickView }: { gif: GifItem; index?:
                 transition={{ duration: 0.15 }}
                 className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"
               >
-                {onQuickView && (
-                  <button
-                    onClick={handleQuickView}
-                    className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 rounded-full bg-white/20 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-md transition-all hover:bg-white/30"
-                  >
-                    <Expand size={12} /> Quick View
-                  </button>
-                )}
-
                 <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
                   <div className="flex items-center gap-3 text-xs text-white/80">
                     <span className="flex items-center gap-1">

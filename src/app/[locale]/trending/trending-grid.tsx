@@ -3,7 +3,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { Loader2 } from 'lucide-react'
 import { GifCard } from '@/components/gif-card'
-import { Lightbox } from '@/components/lightbox'
 import { GifGridSkeleton } from '@/components/gif-skeleton'
 import { cn } from '@/lib/utils'
 import type { GifItem } from '@/lib/types'
@@ -22,11 +21,8 @@ export function TrendingGrid() {
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
   const [loading, setLoading] = useState(true)
-  const [lightboxGif, setLightboxGif] = useState<GifItem | null>(null)
   const sentinelRef = useRef<HTMLDivElement>(null)
   const initialLoad = useRef(true)
-
-  const lightboxIndex = lightboxGif ? gifs.findIndex((g) => g.id === lightboxGif.id) : -1
 
   const fetchGifs = useCallback(async (pageNum: number, append: boolean) => {
     setLoading(true)
@@ -100,7 +96,7 @@ export function TrendingGrid() {
       {gifs.length > 0 && (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {gifs.map((gif, i) => (
-            <GifCard key={gif.id} gif={gif} index={i} onQuickView={setLightboxGif} />
+            <GifCard key={gif.id} gif={gif} index={i} />
           ))}
         </div>
       )}
@@ -120,15 +116,6 @@ export function TrendingGrid() {
           You&apos;ve seen all trending GIFs
         </p>
       )}
-
-      <Lightbox
-        gif={lightboxGif}
-        onClose={() => setLightboxGif(null)}
-        onNext={lightboxIndex < gifs.length - 1 ? () => setLightboxGif(gifs[lightboxIndex + 1]) : undefined}
-        onPrev={lightboxIndex > 0 ? () => setLightboxGif(gifs[lightboxIndex - 1]) : undefined}
-        hasNext={lightboxIndex < gifs.length - 1}
-        hasPrev={lightboxIndex > 0}
-      />
     </div>
   )
 }

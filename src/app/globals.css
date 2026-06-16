@@ -227,3 +227,64 @@ img, video {
 .prose h3:hover .anchor-link::before {
   opacity: 0.5;
 }
+
+/* ── Editorial Prose (Premium Blog Typography) ─── */
+
+.prose-editorial {
+  @apply max-w-[750px] mx-auto text-lg leading-[1.85] text-muted-foreground;
+}
+
+.prose-editorial h2 {
+  @apply text-3xl font-extrabold text-foreground mt-16 mb-6 tracking-tight border-b border-border/50 pb-4;
+}
+
+.prose-editorial h3 {
+  @apply text-2xl font-bold text-foreground mt-10 mb-4 tracking-tight;
+}
+
+.prose-editorial p {
+  @apply mb-6;
+}
+
+.prose-editorial a {
+  @apply text-primary font-medium underline decoration-primary/30 decoration-2 underline-offset-4 transition-colors hover:decoration-primary;
+}
+
+.prose-editorial strong {
+  @apply text-foreground font-bold;
+}
+
+.prose-editorial ul,
+.prose-editorial ol {
+  @apply my-6 pl-6 space-y-3;
+}
+
+.prose-editorial li {
+  @apply relative pl-2;
+}
+
+.prose-editorial ul > li::before {
+  content: '•';
+  @apply absolute -left-5 text-primary/60 text-xl leading-[1];
+}
+
+.prose-editorial blockquote {
+  @apply my-10 pl-6 border-l-4 border-primary bg-primary/5 py-4 px-6 rounded-r-2xl italic text-foreground text-xl leading-relaxed shadow-sm relative overflow-hidden;
+}
+
+.prose-editorial blockquote::before {
+  content: '"';
+  @apply absolute top-0 right-4 text-7xl font-serif text-primary/10;
+}
+
+.prose-editorial code {
+  @apply bg-muted text-foreground px-1.5 py-0.5 rounded-md text-sm font-mono border border-border/50;
+}
+
+.prose-editorial pre {
+  @apply bg-[#0d0d12] text-zinc-100 p-6 rounded-2xl overflow-x-auto text-sm my-8 shadow-xl border border-border/20;
+}
+
+.prose-editorial img {
+  @apply w-full rounded-2xl shadow-md border border-border/50 my-10 object-cover;
+}

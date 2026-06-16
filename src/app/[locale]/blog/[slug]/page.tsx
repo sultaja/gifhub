@@ -138,14 +138,14 @@ export default async function BlogPostPage({ params }: Props) {
             </Link>
 
             {/* Header */}
-            <header className="mb-10">
+            <header className="mb-14">
               {post.categories.length > 0 && (
-                <div className="mb-4 flex flex-wrap gap-2">
+                <div className="mb-6 flex flex-wrap gap-2">
                   {post.categories.map((cat) => (
                     <Link
                       key={cat.id}
                       href={`/blog/category/${cat.slug}`}
-                      className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary transition-colors hover:bg-primary/20"
+                      className="rounded-full bg-primary/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-primary transition-colors hover:bg-primary/20"
                     >
                       {cat.name}
                     </Link>
@@ -153,33 +153,40 @@ export default async function BlogPostPage({ params }: Props) {
                 </div>
               )}
 
-              <h1 className="text-3xl font-extrabold leading-[1.15] tracking-tight text-foreground sm:text-4xl lg:text-[2.75rem]">
+              <h1 className="text-4xl font-extrabold leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-[4rem]">
                 {post.title}
               </h1>
 
               {post.excerpt && (
-                <p className="mt-5 text-lg leading-relaxed text-muted-foreground sm:text-xl">
+                <p className="mt-6 text-xl leading-relaxed text-muted-foreground sm:text-2xl font-medium max-w-[850px]">
                   {post.excerpt}
                 </p>
               )}
 
-              <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-border pb-6 text-sm text-muted-foreground">
-                <span className="flex items-center gap-1.5 font-medium text-foreground">
-                  <User size={15} />
-                  {post.author}
-                </span>
+              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 border-y border-border/50 py-5 text-sm font-medium text-muted-foreground/90 uppercase tracking-wide">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                    {post.author.charAt(0)}
+                  </div>
+                  <span className="text-foreground">{post.author}</span>
+                </div>
                 {publishDate && (
-                  <time dateTime={post.published_at!} className="flex items-center gap-1.5">
-                    <Calendar size={14} />
-                    {publishDate}
-                  </time>
+                  <>
+                    <span className="hidden sm:inline text-border">•</span>
+                    <time dateTime={post.published_at!} className="flex items-center gap-1.5">
+                      <Calendar size={14} className="opacity-70" />
+                      {publishDate}
+                    </time>
+                  </>
                 )}
+                <span className="hidden sm:inline text-border">•</span>
                 <span className="flex items-center gap-1.5">
-                  <Clock size={14} />
+                  <Clock size={14} className="opacity-70" />
                   {post.reading_time} min read
                 </span>
+                <span className="hidden sm:inline text-border">•</span>
                 <span className="flex items-center gap-1.5">
-                  <Eye size={14} />
+                  <Eye size={14} className="opacity-70" />
                   {post.views.toLocaleString()} views
                 </span>
               </div>
@@ -202,21 +209,7 @@ export default async function BlogPostPage({ params }: Props) {
 
             {/* Body */}
             <div
-              className="prose prose-lg mt-10 max-w-none dark:prose-invert
-                prose-headings:text-foreground prose-headings:font-bold prose-headings:scroll-mt-24
-                prose-h2:mt-12 prose-h2:mb-4 prose-h2:text-2xl prose-h2:border-b prose-h2:border-border prose-h2:pb-3
-                prose-h3:mt-8 prose-h3:mb-3 prose-h3:text-xl
-                prose-p:text-muted-foreground prose-p:leading-[1.8]
-                prose-a:text-primary prose-a:font-medium prose-a:no-underline hover:prose-a:underline prose-a:transition-colors
-                prose-strong:text-foreground prose-strong:font-semibold
-                prose-li:text-muted-foreground prose-li:leading-relaxed prose-li:marker:text-primary/40
-                prose-ul:my-4 prose-ol:my-4
-                prose-blockquote:border-l-4 prose-blockquote:border-primary/40 prose-blockquote:bg-muted/30 prose-blockquote:rounded-r-lg prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:not-italic prose-blockquote:text-muted-foreground
-                prose-code:rounded-md prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:text-sm prose-code:font-medium prose-code:text-foreground prose-code:before:content-none prose-code:after:content-none
-                prose-pre:rounded-xl prose-pre:border prose-pre:border-border
-                prose-img:rounded-xl prose-img:shadow-sm prose-img:border prose-img:border-border
-                prose-hr:border-border
-                [&_.anchor-link]:no-underline [&_.anchor-link]:text-inherit hover:[&_.anchor-link]:text-primary"
+              className="prose-editorial"
               dangerouslySetInnerHTML={{ __html: processedBody }}
             />
 

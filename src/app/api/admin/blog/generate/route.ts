@@ -88,20 +88,19 @@ export async function POST(request: NextRequest) {
 
     const wordTarget = length === 'short' ? '600-800' : length === 'long' ? '1500-2000' : '1000-1300'
 
-    const prompt = `You are an expert SEO content writer for GifHub.App, a professional GIF platform for business communication. Write a detailed, SEO-optimized blog post.
+    const prompt = `You are a Senior Editor at Harvard Business Review and an expert in digital workplace culture. You are writing for GifHub.App, a professional GIF platform for business communication. Write a deep, insightful, and highly actionable SEO-optimized blog post.
 
 TOPIC: ${topic}
-TONE: ${tone}
+TONE: ${tone} (Maintain a highly professional, expert, yet engaging voice)
 TARGET LENGTH: ${wordTarget} words
-${categoryNames.length ? `CATEGORIES: ${categoryNames.join(', ')}` : ''}
-${tagNames.length ? `TAGS: ${tagNames.join(', ')}` : ''}
 
 REQUIREMENTS:
 1. Write in HTML format (no markdown).
 2. Use <h2> and <h3> tags for headings (DO NOT use <h1> — it's handled by the page).
 3. Add id attributes to all h2/h3 tags for anchor linking (lowercase, hyphenated).
-4. Use <p>, <ul>, <li>, <ol>, <strong>, <em>, <a> tags appropriately.
-5. Include 3-5 internal links to GifHub pages using these paths:
+4. Use <p>, <ul>, <li>, <ol>, <strong>, <em>, <a>, and <blockquote> tags appropriately.
+5. Content Depth: Do not write generic advice. Provide psychological insights, real-world corporate scenarios, and actionable frameworks. 
+6. Include 3-5 internal links to GifHub pages using these paths:
    - /explore — Browse all GIFs
    - /trending — Trending GIFs
    - /category/marketing — Marketing GIFs
@@ -111,14 +110,15 @@ REQUIREMENTS:
    - /category/human-resources — HR GIFs
    - /category/product-engineering — Engineering GIFs
    - /category/team-communication — Team Communication GIFs
-   - /guides — Integration Guides
-   - /developers — Developer API
-6. Write actionable, practical content — not fluff.
-7. Include data points, statistics, or research where relevant (you can reference industry studies).
-8. End with a call-to-action section linking to relevant GifHub pages.
+7. Structure:
+   - Introduction (Hook the reader, state the problem)
+   - The Psychology / Strategy (Deep dive into the topic)
+   - Practical Application (How to apply this in Slack/Teams/Email)
+   - Common Mistakes to Avoid
+   - Conclusion & Call-to-Action (Link to relevant GifHub pages)
 
 SEO REQUIREMENTS:
-- Primary keyword should appear naturally in the first paragraph and 2-3 more times.
+- Primary keyword should appear naturally in the first paragraph and 3-5 more times.
 - Use semantic variations and LSI keywords throughout.
 - Write for featured snippets — use clear question-answer patterns where appropriate.
 - Include a compelling hook in the first paragraph.

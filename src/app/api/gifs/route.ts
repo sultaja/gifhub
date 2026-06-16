@@ -65,8 +65,9 @@ export async function GET(request: NextRequest) {
 
   const items = gifs.map((g: any) => {
     let gifUrl = g.source_url ?? ''
-    if (g.storage_path && SUPABASE_URL) {
-      gifUrl = `${SUPABASE_URL}/storage/v1/object/public/gifs-bucket/${g.storage_path}`
+    if (g.storage_path) {
+      if (g.storage_path.startsWith('http')) gifUrl = g.storage_path
+      else if (SUPABASE_URL) gifUrl = `${SUPABASE_URL}/storage/v1/object/public/gifs-bucket/${g.storage_path}`
     }
     return {
       id: g.id,

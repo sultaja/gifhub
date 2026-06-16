@@ -62,7 +62,7 @@ export default async function CategoryPage({ params }: Props) {
           <CategoryHero
             name={category.name}
             slug={slug}
-            description={category.description}
+            description={`Browse our curated collection of professional ${category.name} GIFs, perfectly suited for modern workplace communication.`}
             gifCount={totalCount}
           />
 
@@ -101,6 +101,36 @@ export default async function CategoryPage({ params }: Props) {
               </div>
               <p className="text-lg font-medium">No GIFs yet</p>
               <p className="mt-1 text-sm text-muted-foreground">Content is being curated for this category.</p>
+            </div>
+          )}
+
+          {/* High-Value SEO / Editorial Context Block */}
+          {category.description ? (
+            <div className="mt-20 rounded-[2rem] border border-border/50 bg-card/40 p-8 md:p-14 shadow-xl backdrop-blur-md dark:glow-card relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-16 opacity-5 pointer-events-none">
+                <span className="text-[15rem] leading-none font-bold">"</span>
+              </div>
+              <div 
+                className="prose-editorial max-w-none relative z-10" 
+                dangerouslySetInnerHTML={{ __html: category.description }} 
+              />
+            </div>
+          ) : (
+            <div className="mt-16 rounded-2xl border border-border bg-card/50 p-6 md:p-8">
+              <h2 className="mb-4 text-2xl font-bold tracking-tight">The Ultimate Guide to {category.name} Communication</h2>
+              <div className="prose prose-sm dark:prose-invert max-w-none">
+                <p>
+                  Effective communication in <strong>{category.name}</strong> relies heavily on tone, timing, and visual context. 
+                  Whether you're communicating with your team on Slack, presenting to stakeholders, or sending a follow-up email, 
+                  the right GIF can break the ice, show empathy, and reinforce team culture.
+                </p>
+                <h3 className="text-lg font-semibold mt-6 mb-2">When to use these GIFs</h3>
+                <p>
+                  We recommend using these visuals to celebrate milestones, soften the blow of difficult news, 
+                  or simply bring a moment of levity to a busy workday. Remember to always gauge your audience's 
+                  professional boundaries before sending a reaction GIF.
+                </p>
+              </div>
             </div>
           )}
         </main>

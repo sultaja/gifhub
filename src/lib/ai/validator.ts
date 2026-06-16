@@ -8,6 +8,9 @@ export interface ValidatedGif {
   seoDescription: string
   categorySlug: string
   subcategorySlug: string
+  usageScenario: string
+  professionalismScore: number
+  suggestedCaption: string
   tags: string[]
 }
 
@@ -96,7 +99,18 @@ For each ACCEPTED GIF, generate:
 
 4. **categorySlug** + **subcategorySlug**: Pick the BEST match from available options.
 
-5. **tags** (exactly 8 tags):
+5. **usageScenario** (1-2 sentences):
+   - Explain exactly when and why a professional should use this GIF.
+   - Example: "Use this when your team successfully deploys a major release with zero bugs on a Friday afternoon."
+
+6. **professionalismScore** (1-10):
+   - Rate how safe this is for a corporate environment. (10 = totally safe for the CEO, 1 = risky/informal).
+
+7. **suggestedCaption** (1 sentence):
+   - A perfect, witty, or professional text message to send alongside this GIF.
+   - Example: "When the client finally signs the contract after 6 months of negotiations!"
+
+8. **tags** (exactly 8 tags):
    - Mix of: 2 head terms + 3 long-tail phrases + 3 contextual keywords
    - Head terms: "celebration gif", "work reaction"
    - Long-tail: "team meeting reaction", "friday mood office"
@@ -122,11 +136,14 @@ Return ONLY valid JSON array — no markdown, no explanation:
     "seoDescription": "Download this free celebration GIF for your team. Perfect Slack reaction when your project ships successfully.",
     "categorySlug": "product-engineering",
     "subcategorySlug": "feature-shipped",
+    "usageScenario": "Perfect to drop in the engineering Slack channel right after a major release goes live without any rollbacks.",
+    "professionalismScore": 8,
+    "suggestedCaption": "Deploy successful. Nobody touch anything until Monday! 🚀",
     "tags": ["celebration gif", "team win", "project milestone reaction", "office celebration", "slack gif", "professional", "high five", "success"]
   }
 ]
 
-For REJECTED GIFs: { "index": N, "isRelevant": false, "seoTitle": "", "seoAltText": "", "seoDescription": "", "categorySlug": "", "subcategorySlug": "", "tags": [] }`
+For REJECTED GIFs: { "index": N, "isRelevant": false, "seoTitle": "", "seoAltText": "", "seoDescription": "", "categorySlug": "", "subcategorySlug": "", "usageScenario": "", "professionalismScore": 0, "suggestedCaption": "", "tags": [] }`
 
   try {
     const text = await generateWithRetry(prompt)
@@ -144,6 +161,9 @@ For REJECTED GIFs: { "index": N, "isRelevant": false, "seoTitle": "", "seoAltTex
       seoDescription: string
       categorySlug: string
       subcategorySlug: string
+      usageScenario: string
+      professionalismScore: number
+      suggestedCaption: string
       tags: string[]
     }> = JSON.parse(cleaned)
 
@@ -167,6 +187,9 @@ For REJECTED GIFs: { "index": N, "isRelevant": false, "seoTitle": "", "seoAltTex
         seoDescription: item.seoDescription || item.seoAltText || '',
         categorySlug: item.categorySlug || inputs[item.index].targetCategorySlug,
         subcategorySlug: item.subcategorySlug || inputs[item.index].targetSubcategorySlug,
+        usageScenario: item.usageScenario || '',
+        professionalismScore: item.professionalismScore || 5,
+        suggestedCaption: item.suggestedCaption || '',
         tags: Array.isArray(item.tags) ? item.tags.slice(0, 8) : [],
       }
     }

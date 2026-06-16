@@ -3,7 +3,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { Loader2 } from 'lucide-react'
 import { GifCard } from './gif-card'
-import { Lightbox } from './lightbox'
 import { GifGridSkeleton } from './gif-skeleton'
 import type { GifItem } from '@/lib/types'
 
@@ -29,18 +28,7 @@ export function LoadMoreGrid({ title, initialGifs, sort, categoryId, initialHasM
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(initialHasMore)
   const [loading, setLoading] = useState(false)
-  const [lightboxGif, setLightboxGif] = useState<GifItem | null>(null)
   const sentinelRef = useRef<HTMLDivElement>(null)
-
-  const lightboxIndex = lightboxGif ? gifs.findIndex((g) => g.id === lightboxGif.id) : -1
-
-  const handleNext = useCallback(() => {
-    if (lightboxIndex < gifs.length - 1) setLightboxGif(gifs[lightboxIndex + 1])
-  }, [lightboxIndex, gifs])
-
-  const handlePrev = useCallback(() => {
-    if (lightboxIndex > 0) setLightboxGif(gifs[lightboxIndex - 1])
-  }, [lightboxIndex, gifs])
 
   const loadMore = useCallback(async () => {
     if (loading || !hasMore) return
@@ -88,7 +76,7 @@ export function LoadMoreGrid({ title, initialGifs, sort, categoryId, initialHasM
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {gifs.map((gif, i) => (
-          <GifCard key={gif.id} gif={gif} index={i} onQuickView={setLightboxGif} />
+          <GifCard key={gif.id} gif={gif} index={i} />
         ))}
       </div>
 
@@ -103,15 +91,6 @@ export function LoadMoreGrid({ title, initialGifs, sort, categoryId, initialHasM
       {!hasMore && gifs.length > 12 && (
         <p className="mt-10 text-center text-xs text-muted-foreground">You&apos;ve seen all GIFs</p>
       )}
-
-      <Lightbox
-        gif={lightboxGif}
-        onClose={() => setLightboxGif(null)}
-        onNext={handleNext}
-        onPrev={handlePrev}
-        hasNext={lightboxIndex < gifs.length - 1}
-        hasPrev={lightboxIndex > 0}
-      />
     </section>
   )
 }

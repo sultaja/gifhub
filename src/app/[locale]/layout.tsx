@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
-import { setRequestLocale } from 'next-intl/server'
+import { getMessages, setRequestLocale } from 'next-intl/server'
 import Script from 'next/script'
 import { ThemeProvider } from '@/components/theme-provider'
 import { ThemeScript } from '@/components/theme-script'
@@ -53,6 +53,7 @@ type Props = {
 export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params
   setRequestLocale(locale)
+  const messages = await getMessages()
 
   const settings = await getSettings()
   const adsenseId = settings.adsense_client_id
@@ -72,8 +73,7 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <html lang={locale} className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`} suppressHydrationWarning>
-      <head>
-        <ThemeScript />
+      <head suppressHydrationWarning>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#7c3aed" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -114,12 +114,14 @@ export default async function LocaleLayout({ children, params }: Props) {
           />
         )}
 
-        {/* Custom Head Scripts */}
-        {settings.custom_head_scripts && (
-          <div dangerouslySetInnerHTML={{ __html: settings.custom_head_scripts }} />
-        )}
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <ThemeScript />
+        {/* Custom Head Scripts (moved here to prevent hydration errors in head) */}
+        {settings.custom_head_scripts && (
+          <div dangerouslySetInnerHTML={{ __html: settings.custom_head_scripts }} hidden />
+        )}
+        
         {/* GTM noscript fallback */}
         {gtmId && (
           <noscript>
@@ -133,7 +135,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         )}
 
         <ThemeProvider>
-          <NextIntlClientProvider>
+          <NextIntlClientProvider messages={messages}>
             <ToastProvider>
               <ScrollProgress />
               <div id="main-content">

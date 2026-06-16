@@ -3,6 +3,7 @@ const THEME_SCRIPT = `(function(){try{var d=document.documentElement,c=d.classLi
 export function ThemeScript() {
   return (
     <script
+      suppressHydrationWarning
       dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }}
     />
   )

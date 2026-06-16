@@ -64,22 +64,25 @@ export default async function BlogPage({ searchParams }: Props) {
         <Breadcrumbs items={[{ label: 'Blog' }]} />
 
         {/* Hero */}
-        <div className="mt-6 mb-10">
-          <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <div className="mb-3 flex items-center gap-2.5">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/70 shadow-sm">
-                  <Newspaper size={18} className="text-primary-foreground" />
+        <div className="relative mt-8 mb-16 overflow-hidden rounded-3xl border border-border/50 bg-card p-8 sm:p-12 shadow-2xl dark:shadow-none dark:glow-card">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-50" />
+          <div className="absolute -right-20 -top-20 h-[300px] w-[300px] animate-pulse-ring rounded-full bg-primary/20 blur-[80px]" />
+          
+          <div className="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-2xl">
+              <div className="mb-4 flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/60 shadow-lg glow-sm">
+                  <Newspaper size={20} className="text-primary-foreground" />
                 </div>
-                <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
+                <span className="rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-primary glass">
                   {total} article{total !== 1 ? 's' : ''}
                 </span>
               </div>
-              <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
-                GifHub Blog
+              <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+                GifHub <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/60">Blog</span>
               </h1>
-              <p className="mt-2 max-w-lg text-base text-muted-foreground">
-                Tips, guides, and insights on using GIFs for business communication, marketing, and workplace culture.
+              <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
+                Expert insights, deep dives, and practical guides on using GIFs for business communication, marketing campaigns, and remote team culture.
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -105,51 +108,56 @@ export default async function BlogPage({ searchParams }: Props) {
         {featured && page === 1 && (
           <Link
             href={`/blog/${featured.slug}`}
-            className="group mb-12 block overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all hover:border-primary/20 hover:shadow-lg"
+            className="group relative mb-16 block overflow-hidden rounded-[2rem] border border-border/50 bg-card/50 transition-all duration-500 hover:border-primary/30 hover:shadow-2xl dark:hover:glow-card"
           >
-            <div className="flex flex-col md:flex-row">
-              {featured.featured_image && (
-                <div className="relative aspect-[16/9] overflow-hidden md:aspect-auto md:w-1/2">
-                  <img
-                    src={featured.featured_image}
-                    alt={featured.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                  <div className="absolute bottom-4 left-4">
-                    <span className="rounded-full bg-primary px-3.5 py-1.5 text-xs font-bold text-primary-foreground shadow-lg">
-                      Featured
+            <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/50 to-transparent z-10 md:bg-gradient-to-r md:from-background md:via-background/80 md:to-transparent" />
+            {featured.featured_image && (
+              <div className="absolute inset-0 w-full h-full md:left-1/3 md:w-2/3">
+                <img
+                  src={featured.featured_image}
+                  alt={featured.title}
+                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                />
+                <div className="absolute inset-0 bg-black/20" />
+              </div>
+            )}
+            
+            <div className="relative z-20 flex min-h-[400px] flex-col justify-center p-8 md:w-[60%] md:p-14 lg:p-16">
+              {featured.categories.length > 0 && (
+                <div className="mb-6 flex flex-wrap gap-2">
+                  <span className="rounded-full bg-primary px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-primary-foreground shadow-lg glow-sm">
+                    Featured
+                  </span>
+                  {featured.categories.map((cat) => (
+                    <span key={cat.id} className="rounded-full border border-border/50 bg-background/50 backdrop-blur-sm px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-foreground">
+                      {cat.name}
                     </span>
-                  </div>
+                  ))}
                 </div>
               )}
-              <div className="flex flex-col justify-center p-7 md:w-1/2 md:p-10">
-                {featured.categories.length > 0 && (
-                  <div className="mb-4 flex flex-wrap gap-2">
-                    {featured.categories.map((cat) => (
-                      <span key={cat.id} className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
-                        {cat.name}
-                      </span>
-                    ))}
+              <h2 className="text-3xl font-extrabold leading-[1.15] text-foreground transition-colors duration-300 group-hover:text-primary md:text-4xl lg:text-5xl">
+                {featured.title}
+              </h2>
+              {featured.excerpt && (
+                <p className="mt-5 text-lg leading-relaxed text-muted-foreground/90 line-clamp-3 max-w-2xl">
+                  {featured.excerpt}
+                </p>
+              )}
+              <div className="mt-8 flex items-center gap-5 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                    {featured.author.charAt(0)}
                   </div>
-                )}
-                <h2 className="text-2xl font-extrabold leading-tight text-foreground transition-colors group-hover:text-primary md:text-3xl">
-                  {featured.title}
-                </h2>
-                {featured.excerpt && (
-                  <p className="mt-3 leading-relaxed text-muted-foreground line-clamp-3">{featured.excerpt}</p>
-                )}
-                <div className="mt-5 flex items-center gap-4 text-sm text-muted-foreground">
-                  <span className="font-medium text-foreground">{featured.author}</span>
-                  <span className="flex items-center gap-1">
-                    <Clock size={13} />
-                    {featured.reading_time} min
-                  </span>
-                  <span className="ml-auto flex items-center gap-1 font-semibold text-primary">
-                    Read article
-                    <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-                  </span>
+                  <span className="font-semibold text-foreground">{featured.author}</span>
                 </div>
+                <span className="flex items-center gap-1.5 opacity-80">
+                  <Clock size={14} />
+                  {featured.reading_time} min read
+                </span>
+                <span className="ml-auto flex items-center gap-1.5 font-bold text-primary opacity-0 -translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+                  Read article
+                  <ArrowRight size={16} />
+                </span>
               </div>
             </div>
           </Link>

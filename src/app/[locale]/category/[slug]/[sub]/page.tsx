@@ -5,6 +5,8 @@ import { Footer } from '@/components/footer'
 import { Sidebar } from '@/components/sidebar'
 import { MobileSidebar } from '@/components/mobile-sidebar'
 import { GifGrid } from '@/components/gif-grid'
+import fs from 'fs'
+import path from 'path'
 import {
   getCategoryBySlug,
   getSubcategoryBySlug,
@@ -41,6 +43,19 @@ export default async function SubcategoryPage({ params }: Props) {
     getGifsBySubcategory(subcategory.id),
   ])
 
+  let seoDescription = null
+  try {
+    const dataPath = path.join(process.cwd(), 'src', 'data', 'subcategory-seo.json')
+    if (fs.existsSync(dataPath)) {
+      const seoData = JSON.parse(fs.readFileSync(dataPath, 'utf-8'))
+      if (seoData[sub]) {
+        seoDescription = seoData[sub]
+      }
+    }
+  } catch (e) {
+    console.error('Failed to load subcategory SEO data:', e)
+  }
+
   return (
     <>
       <Header />
@@ -72,6 +87,19 @@ export default async function SubcategoryPage({ params }: Props) {
             <div className="flex flex-col items-center py-20">
               <p className="text-lg font-medium">No GIFs yet</p>
               <p className="mt-1 text-sm text-muted-foreground">Check back soon!</p>
+            </div>
+          )}
+
+          {/* High-Value SEO / Editorial Context Block */}
+          {seoDescription && (
+            <div className="mt-20 rounded-[2rem] border border-border/50 bg-card/40 p-8 md:p-14 shadow-xl backdrop-blur-md dark:glow-card relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-16 opacity-5 pointer-events-none">
+                <span className="text-[15rem] leading-none font-bold">"</span>
+              </div>
+              <div 
+                className="prose-editorial max-w-none relative z-10" 
+                dangerouslySetInnerHTML={{ __html: seoDescription }} 
+              />
             </div>
           )}
         </main>

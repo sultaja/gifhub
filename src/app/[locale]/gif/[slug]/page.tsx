@@ -100,26 +100,25 @@ export default async function GifPage({ params }: Props) {
       <RecentlyViewedTracker gifId={gif.id} slug={gif.slug} title={gif.title} url={gif.url} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <div className="mx-auto w-full max-w-6xl px-4 py-6 pb-20 sm:px-6 sm:pb-6">
-        {/* Breadcrumbs */}
-        <nav className="mb-6 flex items-center gap-1 overflow-x-auto text-sm text-muted-foreground">
-          <Link href="/" className="shrink-0 transition-colors hover:text-foreground">Home</Link>
-          <ChevronRight size={12} className="shrink-0" />
+      <main className="mx-auto max-w-5xl px-4 py-8 pb-20 sm:px-6 md:py-12">
+        <nav className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
+          <Link href="/" className="transition-colors hover:text-foreground">Home</Link>
+          <ChevronRight size={14} />
           {gif.categorySlug && (
             <>
-              <Link href={`/category/${gif.categorySlug}`} className="shrink-0 capitalize transition-colors hover:text-foreground">
+              <Link href={`/category/${gif.categorySlug}`} className="capitalize transition-colors hover:text-foreground">
                 {gif.categorySlug.replace(/-/g, ' ')}
               </Link>
-              <ChevronRight size={12} className="shrink-0" />
+              <ChevronRight size={14} />
             </>
           )}
-          <span className="truncate font-medium text-foreground">{gif.title}</span>
+          <span className="truncate text-foreground">{gif.title}</span>
         </nav>
 
-        <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
-          {/* Main GIF */}
-          <div className="min-w-0 flex-1">
-            <div className="overflow-hidden rounded-2xl bg-muted dark:bg-black/40">
+        <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
+          {/* Main Visual */}
+          <div className="flex flex-col gap-6">
+            <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-black shadow-xl ring-1 ring-border/50">
               {isVideo ? (
                 <video src={gif.url} autoPlay loop muted playsInline className="max-h-[70vh] w-full object-contain" />
               ) : (
@@ -171,6 +170,43 @@ export default async function GifPage({ params }: Props) {
                     </span>
                   </Link>
                 ))}
+              </div>
+            )}
+
+            {/* Editorial Context (High Value Content) */}
+            {(gif.usageScenario || gif.suggestedCaption || gif.professionalismScore !== undefined) && (
+              <div className="mt-8 rounded-2xl border border-border bg-card p-6">
+                <h2 className="mb-4 text-lg font-semibold tracking-tight">How to use this GIF professionally</h2>
+                <div className="grid gap-6 sm:grid-cols-2">
+                  {gif.usageScenario && (
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Best Scenario</h3>
+                      <p className="text-sm leading-relaxed">{gif.usageScenario}</p>
+                    </div>
+                  )}
+                  {gif.suggestedCaption && (
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Suggested Message</h3>
+                      <div className="rounded-lg bg-muted/50 p-3">
+                        <p className="text-sm font-medium italic">"{gif.suggestedCaption}"</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {gif.professionalismScore !== undefined && gif.professionalismScore !== null && (
+                  <div className="mt-6 flex items-center gap-3 border-t border-border pt-4">
+                    <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Professionalism Score:</span>
+                    <div className="flex items-center gap-1.5">
+                      <div className="h-2 w-32 overflow-hidden rounded-full bg-muted">
+                        <div 
+                          className={`h-full rounded-full ${gif.professionalismScore >= 8 ? 'bg-emerald-500' : gif.professionalismScore >= 5 ? 'bg-amber-500' : 'bg-rose-500'}`}
+                          style={{ width: `${(gif.professionalismScore / 10) * 100}%` }}
+                        />
+                      </div>
+                      <span className="text-sm font-bold">{gif.professionalismScore}/10</span>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -236,7 +272,7 @@ export default async function GifPage({ params }: Props) {
             <GifGrid title="Related GIFs" gifs={related} columns={4} />
           </div>
         )}
-      </div>
+      </main>
       <Footer />
     </>
   )

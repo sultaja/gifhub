@@ -64,6 +64,9 @@ export async function ingestGifs(
           category_id: categoryId,
           subcategory_id: subcategoryId,
           source_hash: sourceHash,
+          usage_scenario: validated.usageScenario,
+          professionalism_score: validated.professionalismScore,
+          suggested_caption: validated.suggestedCaption,
         })
         .select('id')
         .single()

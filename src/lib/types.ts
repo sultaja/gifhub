@@ -25,6 +25,9 @@ export interface DbGif {
   likes: number
   category_id: string | null
   subcategory_id: string | null
+  usage_scenario: string | null
+  professionalism_score: number | null
+  suggested_caption: string | null
   created_at: string
 }
 
@@ -59,5 +62,8 @@ export interface GifItem {
   likes: number
   categorySlug: string
   subcategorySlug: string
+  usageScenario?: string | null
+  professionalismScore?: number | null
+  suggestedCaption?: string | null
   tags: string[]
 }
